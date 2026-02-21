@@ -162,7 +162,7 @@ export class DatabaseStorage implements IStorage {
   await this.createNotification({
   recipientId: recipient.id,
   actorId: sender.id,
-  entityId: follow.id,
+  entityId: insertFollow.followerId,
   type: "follow_request",
   title: "New follow request",
   body: `${sender.username} wants to follow you`,
@@ -395,6 +395,10 @@ export class DatabaseStorage implements IStorage {
 
   async createFollow(insertFollow: InsertFollow): Promise<Follow> {
     const [follow] = await db.insert(follows).values(insertFollow).returning();
+
+  if (!insertFollow.followerId) {
+  throw new Error("createFollow: followerId missing");
+ }
 
     try {
       const recipient = await this.getUser(insertFollow.followingId);
