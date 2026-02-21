@@ -86,6 +86,7 @@ export interface IStorage {
   
   // Messaging
   getConversation(conversationId: string): Promise<Conversation | undefined>;
+  getConversationById(id: string): Promise<Conversation | undefined>;
   getConversations(userId: string): Promise<any[]>;
   getOrCreateConversation(userId1: string, userId2: string): Promise<Conversation>;
   getConversationMessages(conversationId: string): Promise<any[]>;
@@ -746,6 +747,12 @@ export class DatabaseStorage implements IStorage {
       .from(conversations)
       .where(eq(conversations.id, conversationId));
     return conv;
+  }
+
+  async getConversationById(id: string): Promise<Conversation | undefined> {
+  return db.query.conversations.findFirst({
+    where: eq(conversations.id, id),
+    });
   }
 
   async getOrCreateConversation(userId1: string, userId2: string): Promise<Conversation> {
