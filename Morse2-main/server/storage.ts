@@ -399,6 +399,7 @@ export class DatabaseStorage implements IStorage {
       if (recipient && sender) {
         await db.insert(notifications).values({
           recipientId: recipient.id,
+          actorId: sender.id,
           type: "follow_request",
           title: "New follow request",
           body: `${sender.username} wants to follow you`,
