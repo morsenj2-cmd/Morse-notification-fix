@@ -11,8 +11,8 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, inArray, or, sql, gte, lt } from "drizzle-orm";
-import { sendEmail } from "../services/emailService";
-import { newDMEmail, newFollowRequestEmail } from "../lib/emailTemplates";
+import { sendEmail } from "./services/emailService";
+import { newDMEmail, newFollowRequestEmail } from "./lib/emailTemplates";
 
 export interface IStorage {
   // Users
