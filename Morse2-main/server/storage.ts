@@ -395,6 +395,9 @@ export class DatabaseStorage implements IStorage {
     try {
       const recipient = await this.getUser(insertFollow.followingId);
       const sender = await this.getUser(insertFollow.followerId);
+      console.log("FOLLOW_DEBUG_SENDER", sender);
+      console.log("FOLLOW_DEBUG_SENDER_ID", sender?.id);
+      console.log("FOLLOW_DEBUG_FOLLOWER_ID", insertFollow.followerId);
 
       if (recipient && sender) {
         await db.insert(notifications).values({
