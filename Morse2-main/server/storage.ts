@@ -158,11 +158,14 @@ export class DatabaseStorage implements IStorage {
     entityId: string;
   }): Promise<void> {
     await db.insert(notifications).values({
-      recipientId: data.recipientId,
-      actorId: data.actorId,
-      type: data.type,
-      entityId: data.entityId,
-    });
+    recipientId: recipient.id,
+    actorId: sender.id,
+    entityId: follow.id,
+    type: "follow_request",
+    title: "New follow request",
+    body: `${sender.username} wants to follow you`,
+    read: false,
+  });
   }
 
   async getUserNotifications(userId: string): Promise<any[]> {
@@ -403,6 +406,7 @@ export class DatabaseStorage implements IStorage {
         await db.insert(notifications).values({
           recipientId: recipient.id,
           actorId: sender.id,
+          entityId: follow.id,
           type: "follow_request",
           title: "New follow request",
           body: `${sender.username} wants to follow you`,
