@@ -411,11 +411,15 @@ export class DatabaseStorage implements IStorage {
             sender.username || "Someone"
           );
 
-          await sendEmail({
+        console.log("EMAIL_TRIGGERED_FOLLOW", recipient.email);
+
+          const emailResult = await sendEmail({
             to: recipient.email,
             subject: email.subject,
             html: email.html,
           });
+
+        console.log("EMAIL_RESULT_FOLLOW", emailResult);
         }
       }
     } catch (err) {
