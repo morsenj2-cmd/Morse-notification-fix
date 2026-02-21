@@ -152,21 +152,22 @@ export class DatabaseStorage implements IStorage {
 
  // Notifications
  async createNotification(data: {
-    recipientId: string;
-    actorId: string;
-    type: string;
-    entityId: string;
-  }): Promise<void> {
-    await db.insert(notifications).values({
-    recipientId: recipient.id,
-    actorId: sender.id,
-    entityId: follow.id,
-    type: "follow_request",
-    title: "New follow request",
-    body: `${sender.username} wants to follow you`,
-    read: false,
-  });
-  }
+  recipientId: string;
+  actorId: string;
+  entityId: string;
+  type: string;
+  title: string;
+  body: string;
+}): Promise<void> {
+  await this.createNotification({
+  recipientId: recipient.id,
+  actorId: sender.id,
+  entityId: follow.id,
+  type: "follow_request",
+  title: "New follow request",
+  body: `${sender.username} wants to follow you`,
+ });
+}
 
   async getUserNotifications(userId: string): Promise<any[]> {
     return db
@@ -403,15 +404,14 @@ export class DatabaseStorage implements IStorage {
       console.log("FOLLOW_DEBUG_FOLLOWER_ID", insertFollow.followerId);
 
       if (recipient && sender) {
-        await db.insert(notifications).values({
-          recipientId: recipient.id,
-          actorId: sender.id,
-          entityId: follow.id,
-          type: "follow_request",
-          title: "New follow request",
-          body: `${sender.username} wants to follow you`,
-          read: false,
-        });
+        await this.createNotification({
+        recipientId: recipient.id,
+        actorId: sender.id,
+        entityId: follow.id,
+        type: "follow_request",
+        title: "New follow request",
+        body: `${sender.username} wants to follow you`,
+      });
 
         if (recipient.email) {
           const email = newFollowRequestEmail(
@@ -832,13 +832,14 @@ export class DatabaseStorage implements IStorage {
           const sender = await this.getUser(senderId);
 
           if (receiver && sender) {
-            await db.insert(notifications).values({
-              userId: receiver.id,
-              type: "dm",
-              title: "New message",
-              body: `${sender.username} sent you a message`,
-              read: false,
-            });
+            await this.createNotification({
+            recipientId: recipient.id,
+            actorId: sender.id,
+            entityId: follow.id,
+            type: "follow_request",
+            title: "New follow request",
+            body: `${sender.username} wants to follow you`,
+          });
 
             if (receiver.email) {
               const email = newDMEmail(
@@ -957,13 +958,14 @@ export class DatabaseStorage implements IStorage {
         const sender = await this.getUser(authorId);
 
         if (recipient && sender) {
-          await db.insert(notifications).values({
-            userId: recipient.id,
-            type: "thread_comment",
-            title: "New comment on your thread",
-            body: `${sender.username} commented on your thread`,
-            read: false,
-          });
+          await this.createNotification({
+          recipientId: recipient.id,
+          actorId: sender.id,
+          entityId: follow.id,
+          type: "follow_request",
+          title: "New follow request",
+          body: `${sender.username} wants to follow you`,
+        });
 
           if (recipient.email) {
             const email = newDMEmail(
