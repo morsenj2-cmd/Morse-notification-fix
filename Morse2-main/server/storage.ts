@@ -159,14 +159,14 @@ export class DatabaseStorage implements IStorage {
   title: string;
   body: string;
 }): Promise<void> {
-  await this.createNotification({
-  recipientId: recipient.id,
-  actorId: sender.id,
-  entityId: insertFollow.followerId,
-  type: "follow_request",
-  title: "New follow request",
-  body: `${sender.username} wants to follow you`,
- });
+  const { recipientId, actorId, entityId } = data;
+
+  if (!recipientId || !actorId || !entityId) {
+    console.error("BLOCKED_BAD_NOTIFICATION", data);
+    return;
+  }
+
+  await db.insert(notifications).values(data);
 }
 
   async getUserNotifications(userId: string): Promise<any[]> {
