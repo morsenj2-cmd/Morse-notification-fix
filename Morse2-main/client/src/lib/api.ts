@@ -14,10 +14,13 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
   });
 
 // Handle expired or missing session immediately
-  if (response.status === 401) {
+ if (response.status === 401) {
+  // prevent infinite redirect loop
+  if (!window.location.pathname.includes("/sign-in")) {
     window.location.href = "/sign-in";
-    return;
   }
+  return;
+}
 
 // Only parse JSON when it is actually JSON
 const contentType = response.headers.get("content-type");
