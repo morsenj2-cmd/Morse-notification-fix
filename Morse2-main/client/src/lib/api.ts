@@ -12,17 +12,33 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
     },
     credentials: "include",
   });
-  
-  if (!response.ok) {
-    let msg = response.statusText || "Server error";
-    try {
-      const body = await response.json();
-      if (body?.message) msg = body.message;
-    } catch {}
-    throw new Error(msg);
+
+// Handle expired or missing session immediately
+  if (response.status === 401) {
+    window.location.href = "/sign-in";
+    return;
   }
-  
-  return response.json();
+
+// Only parse JSON when it is actually JSON
+const contentType = response.headers.get("content-type");
+
+  if (contentType && contentType.includes("application/json")) {
+    const data = await response.json();
+
+    if (!response.ok) {
+      const msg = data?.message || response.statusText || "Server error";
+      throw new Error(msg);
+    }
+
+    return data;
+  }
+
+// Fallback for non-JSON responses
+if (!response.ok) {
+ throw new Error(response.statusText || "Server error");
+  }
+
+  return response;
 }
 
 // For public endpoints that don't require auth
