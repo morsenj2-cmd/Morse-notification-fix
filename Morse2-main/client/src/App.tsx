@@ -2,6 +2,7 @@ import { RequestsPage } from "@/pages/RequestsPage";
 import { Switch, Route, Redirect } from "wouter";
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 import { SignedIn, SignedOut, RedirectToSignIn, ClerkLoaded } from "@clerk/clerk-react";
+import { SignIn } from "@clerk/clerk-react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -83,7 +84,7 @@ function Router() {
       <Route path="/requests" component={RequestsPage} />
       <Route path="/" component={Desktop} />
       <Route path="/sso-callback" component={AuthenticateWithRedirectCallback} />
-      <Route path="/sign-in" component={AuthenticateWithRedirectCallback} />
+      <Route path="/sign-in" component={SignIn} />
       <Route path="/about" component={AboutUs} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/blog" component={Blog} />
