@@ -61,10 +61,15 @@ async function fetchPublic(url: string) {
 
 // User hooks
 export function useCurrentUser() {
+  const isOnAuthPage =
+    typeof window !== "undefined" &&
+    window.location.pathname.includes("/sign-in");
+
   return useQuery({
     queryKey: ["currentUser"],
     queryFn: () => fetchWithAuth(`${API_BASE}/me`),
     retry: false,
+    enabled: !isOnAuthPage,
   });
 }
 
