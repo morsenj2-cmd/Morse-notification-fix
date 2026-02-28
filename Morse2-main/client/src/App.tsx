@@ -1,7 +1,7 @@
 import { RequestsPage } from "@/pages/RequestsPage";
 import { Switch, Route, Redirect } from "wouter";
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
-import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, RedirectToSignIn, ClerkLoaded } from "@clerk/clerk-react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -67,17 +67,16 @@ function OnboardingGuard({ component: Component }: { component: React.ComponentT
 
 function ProtectedRoute({ component: Component, skipOnboardingCheck }: { component: React.ComponentType; skipOnboardingCheck?: boolean }) {
   return (
-    <ClerkGuard fallback={<ClerkUnavailableFallback />}>
+    <>
       <SignedIn>
         {skipOnboardingCheck ? <Component /> : <OnboardingGuard component={Component} />}
       </SignedIn>
       <SignedOut>
         <RedirectToSignIn />
       </SignedOut>
-    </ClerkGuard>
+    </>
   );
 }
-
 function Router() {
   return (
     <Switch>
